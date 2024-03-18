@@ -1,0 +1,16 @@
+{
+    "version": "1.0.0",
+    "list": [
+        {
+            "id": 1,
+            "name": "EasyBA Demo",
+            "account": "hi@easyba.com",
+            "icon": null,
+            "secret": "JBSWY3DPFRKGQ2LTEBUXGICFMFZXSQSB",
+            "digit": "6",
+            "interval": "30",
+            "encrypt": "sha1",
+            "latestEdited": 1000000000
+        }
+    ]
+}

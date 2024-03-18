@@ -1,0 +1,222 @@
+@font-face {
+    font-family: 'AlimamaShuHeiTi';  /* 字体名称，可以自定义 */
+    src: url('./font/AlimamaShuHeiTi-Bold.ttf') format('truetype');  /* 字体文件的路径和格式 */
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'AlimamaShuHeiTi', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    user-select: none;
+    -webkit-app-region: drag;
+}
+
+mdui-top-app-bar {
+    user-select: none;
+    -webkit-app-region: drag;
+}
+
+mdui-linear-progress {
+    height: 10px;
+    --shape-corner: 10px;
+}
+
+.headerButton {
+    -webkit-app-region: no-drag;
+}
+
+.authenticatorPage {
+    padding: 10px 20px;
+}
+
+.authenticatorPageToolbar {
+    margin-bottom: 20px;
+}
+
+.noAuthenticatorNotice {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.noAuthenticatorNotice h1 {
+    text-align: center;
+    font-size: 160px;
+    margin: 0;
+}
+
+.noAuthenticatorNotice p {
+    font-size: 30px;
+    text-align: center;
+    margin: 0;
+    color: #787878;
+}
+
+.authenticatorCardList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.authenticatorCard {
+    height: 200px;
+    width: 300px;
+    padding: 29px 26px;
+    margin: 20px;
+}
+
+.authenticatorCardCodeCard {
+    padding-left: 4px;
+    padding-right: 4px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.authenticatorCardInfo {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.authenticatorCardCode {
+    font-size: 48px;
+    margin: 4px 0 4px;
+}
+
+.authenticatorCardName {
+    font-size: 25px;
+    margin: 0;
+}
+
+.authenticatorCardAccount {
+    font-size: 16px;
+    margin-top: 2px;
+    margin-bottom: 0;
+    color: #787878;
+}
+
+
+.addAuthenticatorWindow {
+    padding: 20px;
+}
+
+.addAuthenticatorWindow-input {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.editAuthenticatorWindow {
+    padding: 20px;
+}
+
+.editAuthenticatorWindow-input {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.exportAuthenticatorWindow {
+    padding: 20px;
+}
+
+.exportAuthenticatorWindowInfo {
+    padding-right: 20px;
+}
+
+.exportAuthenticatorWindowInfoText {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.exportAuthenticatorWindowOther {
+    padding-left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* 确保元素占满父元素的高度 */
+    flex-direction: column; /* 使元素垂直排列 */
+}
+
+.exportAuthenticatorQrCode {
+    border-radius: 20px;
+}
+
+.addBnetAuthenticatorWindow {
+    padding: 20px;
+}
+
+.addBnetAuthenticatorWindow-input {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.addBnetAuthenticatorWindow-input-name {
+    padding-right: 5px;
+}
+
+.addBnetAuthenticatorWindow-input-account {
+    padding-left: 5px;
+}
+
+.addBnetAuthenticatorWindowInputBox {
+}
+
+.aboutPage {
+    padding: 30px 60px;
+}
+
+.aboutPageBox {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.appInfo {
+    padding: 30px;
+    margin: 20px;
+}
+
+.helpInfo {
+    padding: 30px;
+    margin: 20px;
+}
+
+.helpInfoButton {
+    margin: 5px;
+}
+
+.updateWindow {
+    padding: 20px;
+}
+
+/* 定义滚动条的宽度 */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* 定义滚动条轨道的样式 */
+::-webkit-scrollbar-track {
+    background: rgba(241, 241, 241, 0);
+}
+
+/* 定义滚动条的样式 */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 20px;
+}
+
+/* 定义滚动条在鼠标悬停时的样式 */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.mdui-dialog-content {
+    white-space: pre-line !important;
+}

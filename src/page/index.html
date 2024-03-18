@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html class="mdui-theme-dark" lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>EasyBA - 暴雪安全令管理工具</title>
+    <link href="./assets/index.css" rel="stylesheet">
+    <link href="./assets/mdui/mdui.css" rel="stylesheet">
+    <script src="./assets/mdui/mdui.js"></script>
+    <link href="assets/mdui/materialIcons.css" rel="stylesheet">
+</head>
+<body>
+<header>
+    <mdui-top-app-bar scroll-behavior="elevate" style="position: fixed;">
+        <mdui-top-app-bar-title style="padding-left: 20px">EasyBA - 战网安全令管理工具</mdui-top-app-bar-title>
+        <div style="flex-grow: 1"></div>
+        <mdui-switch class="headerButton" id="dark-mode-switch">
+            <mdui-icon name="nightlight" slot="unchecked-icon"></mdui-icon>
+            <mdui-icon name="wb_sunny" slot="checked-icon"></mdui-icon>
+        </mdui-switch>
+        <div style="flex-grow: 0"></div>
+        <div id="windowControl" style="padding-right: 20px">
+            <mdui-button-icon class="headerButton" icon='horizontal_rule' id="minimizeButton"></mdui-button-icon>
+            <mdui-button-icon class="headerButton" icon='crop_square' id="maximizeButton"></mdui-button-icon>
+            <mdui-button-icon class="headerButton" icon="close" id="closeButton"></mdui-button-icon>
+        </div>
+    </mdui-top-app-bar>
+</header>
+<div class="authenticatorPage tab" id="authenticator">
+    <div class="authenticatorPageToolbar">
+        <mdui-segmented-button-group>
+            <mdui-segmented-button icon="add" id="addAuthenticator">添加验证码</mdui-segmented-button>
+            <mdui-segmented-button icon="add" id="addBnetAuthenticator">添加战网安全令</mdui-segmented-button>
+            <mdui-segmented-button icon="refresh" id="refreshAuthenticators">刷新</mdui-segmented-button>
+        </mdui-segmented-button-group>
+    </div>
+    <div class="authenticatorCardList" id="authenticatorCardList">
+        <div class="noAuthenticatorNotice">
+            <h1>😮</h1>
+            <br>
+            <p>还没有添加任何验证器</p>
+        </div>
+    </div>
+</div>
+<!-- 关于界面 -->
+<div class="aboutPage tab" id="about" style="display: none">
+    <div class="aboutPageBox" style="display: flex;">
+        <mdui-card class="appInfo">
+            <mdui-avatar src="./assets/img/icon.png" style="height: 100px;width: 100px"></mdui-avatar>
+            <h1>EasyBA - 战网安全令管理工具</h1>
+            <p>本工具可以帮助你快捷导入战网安全令，不再依赖战网APP获取验证码
+                <br>同时还支持其它TOTP验证码导入生成（暂不支持HOTP）
+                <br>也可以将导入的战网安全令导出至其它应用程序
+                <br>例如谷歌验证器，FreeOTP等软件
+            </p>
+            <div style="display: flex">
+                <h2>开发者：KINDYEAR</h2>
+                <h2>&nbsp;&nbsp;版本：</h2>
+                <h2 id="appVersion">null</h2>
+            </div>
+        </mdui-card>
+        <mdui-card class="helpInfo">
+            <mdui-avatar src="./assets/img/info.png" style="height: 100px;width: 100px"></mdui-avatar>
+            <h1>使用帮助/信息</h1>
+            <mdui-button class="helpInfoButton" icon="help" id="helpDoc" variant="outlined">帮助文档</mdui-button>
+            <mdui-button class="helpInfoButton" icon="update" id="checkUpdate" variant="outlined">检测更新</mdui-button>
+            <br>
+            <mdui-button class="helpInfoButton" icon="alternate_email" id="callAuthor" variant="outlined">联系开发者
+            </mdui-button>
+            <mdui-button class="helpInfoButton" href="" icon="group_add" id="joinQGroup" variant="outlined">加入Q群
+            </mdui-button>
+            <br>
+        </mdui-card>
+    </div>
+</div>
+<!-- 底部导航栏 -->
+<mdui-navigation-bar value="pageTab">
+    <mdui-navigation-bar-item icon="shield" value="authenticator">安全令</mdui-navigation-bar-item>
+    <mdui-navigation-bar-item icon="info" value="about">关于</mdui-navigation-bar-item>
+</mdui-navigation-bar>
+
+<!-- 添加安全令的窗口组件 -->
+<mdui-dialog class="addAuthenticatorWindow" headline="添加验证码" icon="shield" id="addAuthenticatorWindow">
+    <div style="display: flex">
+        <mdui-text-field class="addAuthenticatorWindow-input" clearable id="addAuthenticatorName"
+                         label="名称"></mdui-text-field>
+        <mdui-text-field class="addAuthenticatorWindow-input" clearable id="addAuthenticatorAccount"
+                         label="账号"></mdui-text-field>
+    </div>
+    <br>
+    <div style="display: flex">
+        <mdui-text-field class="addAuthenticatorWindow-input" clearable id="addAuthenticatorSecret"
+                         label="密钥"></mdui-text-field>
+        <mdui-select class="addAuthenticatorWindow-input" id="addAuthenticatorEncrypt" label="加密算法"
+                     placeholder="选择加密方式" value="sha1">
+            <mdui-menu-item value="sha1">SHA1</mdui-menu-item>
+            <mdui-menu-item value="sha256">SHA256</mdui-menu-item>
+            <mdui-menu-item value="sha512">SHA521</mdui-menu-item>
+        </mdui-select>
+    </div>
+    <br>
+    <div style="display: flex">
+        <mdui-select class="addAuthenticatorWindow-input" id="addAuthenticatorDigit" label="验证码位数"
+                     placeholder="选择验证码位数" value="6">
+            <mdui-menu-item value="6">6</mdui-menu-item>
+            <mdui-menu-item value="7">7</mdui-menu-item>
+            <mdui-menu-item value="8">8</mdui-menu-item>
+        </mdui-select>
+        <mdui-select class="addAuthenticatorWindow-input" id="addAuthenticatorInterval" label="刷新间隔"
+                     placeholder="选择刷新间隔" value="30">
+            <mdui-menu-item value="15">15s</mdui-menu-item>
+            <mdui-menu-item value="30">30s</mdui-menu-item>
+            <mdui-menu-item value="60">1m</mdui-menu-item>
+            <mdui-menu-item value="120">2m</mdui-menu-item>
+            <mdui-menu-item value="300">5m</mdui-menu-item>
+            <mdui-menu-item value="600">10m</mdui-menu-item>
+        </mdui-select>
+    </div>
+    <br>
+    <mdui-button class="closeAuthenticatorWindow" variant="tonal">取消</mdui-button>
+    <mdui-button class="saveAuthenticator" id="saveAuthenticator">保存</mdui-button>
+</mdui-dialog>
+
+<!-- 添加暴雪安全令的窗口组件 -->
+<mdui-dialog class="addBnetAuthenticatorWindow" headline="添加战网安全令" icon="videogame_asset"
+             id="addBnetAuthenticatorWindow">
+    <div class="addBnetAuthenticatorWindowInputBox">
+        <p>如果你已经有40位密钥，直接填入下列的“40位密钥”输入框，然后填写验证码备注信息，点击保存即可</p>
+        <p>如果没有40位密钥，点击下面的“打开网页”按钮，在浏览器弹出的页面登录战网<br>
+            登录成功后会显示404页面，复制该页的网址到“登录令牌网址”输入框<br>填写验证码备注信息，点击保存即可
+        </p>
+        <mdui-button id="openWebPageButton" variant="outlined">打开网页
+            (请注意打开的网址是否为战网，软件不会收集传输你的信息)
+        </mdui-button>
+        <mdui-text-field class="addBnetAuthenticatorWindow-input" helper="请复制登录后显示404的页面的网址到这里"
+                         id="addBnetAuthenticatorTokenUrl"
+                         label="登录令牌网址"></mdui-text-field>
+        <mdui-text-field class="addBnetAuthenticatorWindow-input" helper="若输入了40位密钥，则不使用登录令牌网址"
+                         id="addBnetAuthenticator40bitToken"
+                         label="40位密钥"></mdui-text-field>
+        <div style="display: flex">
+            <mdui-text-field class="addBnetAuthenticatorWindow-input-name" clearable id="addBnetAuthenticatorName"
+                             label="名称"></mdui-text-field>
+            <mdui-text-field class="addBnetAuthenticatorWindow-input-account" clearable id="addBnetAuthenticatorAccount"
+                             label="账号"></mdui-text-field>
+        </div>
+    </div>
+    <br>
+    <mdui-button class="closeBnetAuthenticatorWindow" variant="tonal">取消</mdui-button>
+    <mdui-button class="saveBnetAuthenticator" id="saveBnetAuthenticator">保存</mdui-button>
+</mdui-dialog>
+
+<!-- 编辑验证码/安全令的窗口组件 -->
+<mdui-dialog class="editAuthenticatorWindow" headline="编辑验证码(名称)" icon="edit" id="editAuthenticatorWindow">
+    <div style="display: flex">
+        <mdui-text-field class="editAuthenticatorWindow-input" clearable id="editAuthenticatorName"
+                         label="名称"></mdui-text-field>
+        <mdui-text-field class="editAuthenticatorWindow-input" clearable id="editAuthenticatorAccount"
+                         label="账号"></mdui-text-field>
+    </div>
+    <br>
+    <div style="display: flex">
+        <mdui-text-field class="editAuthenticatorWindow-input" clearable id="editAuthenticatorSecret"
+                         label="密钥"></mdui-text-field>
+        <mdui-select class="editAuthenticatorWindow-input" id="editAuthenticatorEncrypt" label="加密算法"
+                     placeholder="选择加密方式" value="sha1">
+            <mdui-menu-item value="sha1">SHA1</mdui-menu-item>
+            <mdui-menu-item value="sha256">SHA256</mdui-menu-item>
+            <mdui-menu-item value="sha512">SHA521</mdui-menu-item>
+        </mdui-select>
+    </div>
+    <br>
+    <div style="display: flex">
+        <mdui-select class="editAuthenticatorWindow-input" id="editAuthenticatorDigit" label="验证码位数"
+                     placeholder="选择验证码位数" value="6">
+            <mdui-menu-item value="6">6</mdui-menu-item>
+            <mdui-menu-item value="7">7</mdui-menu-item>
+            <mdui-menu-item value="8">8</mdui-menu-item>
+        </mdui-select>
+        <mdui-select class="editAuthenticatorWindow-input" id="editAuthenticatorInterval" label="刷新间隔"
+                     placeholder="选择刷新间隔" value="30">
+            <mdui-menu-item value="15">15s</mdui-menu-item>
+            <mdui-menu-item value="30">30s</mdui-menu-item>
+            <mdui-menu-item value="60">1m</mdui-menu-item>
+            <mdui-menu-item value="120">2m</mdui-menu-item>
+            <mdui-menu-item value="300">5m</mdui-menu-item>
+            <mdui-menu-item value="600">10m</mdui-menu-item>
+        </mdui-select>
+    </div>
+    <button id="editAuthenticatorWindowId" style="display: none" value=""></button>
+    <br>
+    <div style="display: flex">
+        <mdui-button class="closeEditAuthenticatorWindow" variant="tonal">取消</mdui-button>
+        &nbsp;
+        <mdui-button id="exportAuthenticator" variant="elevated">导出</mdui-button>
+        &nbsp;
+        <mdui-button class="saveEditAuthenticator" id="saveEditAuthenticator">保存</mdui-button>
+        <div style="flex-grow: 1"></div>
+        <mdui-button class="deleteAuthenticator" id="deleteEditAuthenticator" style="color: red" variant="outlined">
+            删除
+        </mdui-button>
+    </div>
+</mdui-dialog>
+
+<!-- 导出安全令的窗口组件 -->
+<mdui-dialog class="exportAuthenticatorWindow" headline="导出安全令(名称)" icon="import_export"
+             id="exportAuthenticatorWindow">
+    <div style="display: flex">
+        <div class="exportAuthenticatorWindowInfo">
+            <mdui-text-field class="exportAuthenticatorWindowInfoText" id="exportAuthenticatorName" label="名称"
+                             readonly value=""></mdui-text-field>
+            <mdui-text-field class="exportAuthenticatorWindowInfoText" id="exportAuthenticatorAccount" label="账号"
+                             readonly value=""></mdui-text-field>
+            <mdui-text-field class="exportAuthenticatorWindowInfoText" id="exportAuthenticatorSecret" label="密钥"
+                             readonly value=""></mdui-text-field>
+            <mdui-text-field class="exportAuthenticatorWindowInfoText" id="exportAuthenticatorDigit" label="位数"
+                             readonly value=""></mdui-text-field>
+            <mdui-text-field class="exportAuthenticatorWindowInfoText" id="exportAuthenticatorInterval" label="有效期"
+                             readonly value=""></mdui-text-field>
+            <mdui-text-field class="exportAuthenticatorWindowInfoText" id="exportAuthenticatorEncrypt" label="加密方式"
+                             readonly value=""></mdui-text-field>
+        </div>
+        <div class="exportAuthenticatorWindowOther">
+            <div class="exportAuthenticatorWindowImg">
+                <img alt="QRCODE"
+                     class="exportAuthenticatorQrCode"
+                     src="">
+            </div>
+            <br>
+            <mdui-button icon="download" id="saveExportQrCode" variant="outlined">保存二维码</mdui-button>
+            <br>
+            <mdui-button icon="content_copy" id="copyOtpAuthLink" variant="outlined">复制OtpAuth链接</mdui-button>
+        </div>
+    </div>
+    <br>
+    <mdui-button class="closeExportAuthenticatorWindow" id="closeExportAuthenticatorWindow" variant="tonal">关闭
+    </mdui-button>
+</mdui-dialog>
+<mdui-dialog class="updateWindow" icon="update" id="updateWindow">
+    <div class="updateWindowInfo">
+        <h1>检测到新版本</h1>
+        <p>当前版本：<span id="currentVersion"></span></p>
+        <p>最新版本：<span id="latestVersion"></span></p>
+        <p>更新时间：<span id="updateTime"></span></p>
+        <p>更新内容：</p>
+        <p id="updateInfo">TEST<br></p>
+    </div>
+    <br>
+    <div class="updateWindowButton">
+        <mdui-button icon="download" id="updateWindowDownload" variant="outlined">下载更新</mdui-button>
+        <mdui-button icon="close" id="updateWindowCancel" variant="outlined">取消</mdui-button>
+    </div>
+</mdui-dialog>
+<script src="./assets/index.js" type="module"></script>
+<script src="./assets/js/initAuthenticatorPage.js" type="module"></script>
+<script>
+</script>
+</body>
+</html>
